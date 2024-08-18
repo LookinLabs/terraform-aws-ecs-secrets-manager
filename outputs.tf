@@ -4,6 +4,6 @@ output "ecs_secrets" {
 }
 
 output "secretsmanager_secret_arn" {
-  value = aws_secretsmanager_secret.this.arn
+  value = aws_secretsmanager_secret.ecs.arn
   description = "AWS SecretsManager secret ARN"
 }

@@ -79,16 +79,16 @@ After `terraform apply` you have to go to the AWS Console SecretsManager dashboa
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.30.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.3 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.6.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.30.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | >= 3.5.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 3.6.2 |
 
 ## Modules
 
@@ -98,20 +98,20 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_iam_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.read_secrets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_role_policy_attachment.ecs_secrets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_secretsmanager_secret.ecs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
 | [random_id.policy_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
-| [aws_iam_role_policy_attachment.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_secretsmanager_secret.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_ecs_task_execution_roles"></a> [ecs\_task\_execution\_roles](#input\_ecs\_task\_execution\_roles) | ECS task execution role names | `list(string)` | `[]` | yes |
-| <a name="input_key_names"></a> [key\_names](#input\_key\_names) | Secret names that will be injected as env variables | `list(string)` | `[]` | yes |
+| <a name="input_description"></a> [description](#input\_description) | AWS SecretsManager secret description | `string` | `null` | no |
+| <a name="input_ecs_task_execution_roles"></a> [ecs\_task\_execution\_roles](#input\_ecs\_task\_execution\_roles) | ECS task execution role names that should be allowed to read secrets | `list(string)` | `[]` | no |
+| <a name="input_enable_secret_assigned_to_single_key"></a> [enable\_secret\_assigned\_to\_single\_key](#input\_enable\_secret\_assigned\_to\_single\_key) | Enables returning the whole secret as a single key-value pair | `bool` | `false` | no |
+| <a name="input_key_names"></a> [key\_names](#input\_key\_names) | Secret names that will be injected as env variables | `list(string)` | `[]` | no |
 | <a name="input_name"></a> [name](#input\_name) | AWS SecretsManager secret name | `string` | n/a | yes |
-| <a name="input_description"></a> [description](#input\_description) | AWS SecretsManager secret description | `string` | n/a | no |
-| <a name="input_enable_secret_assigned_to_single_key"></a> [enable\_secret\_assigned\_to\_single\_key](#input\_enable\_secret\_assigned\_to\_single\_key) | Enables returning the whole secret as a single key-value pair | `string` | `false` | no |
 
 ## Outputs
 

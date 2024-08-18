@@ -1,4 +1,4 @@
-resource "aws_secretsmanager_secret" "this" {
+resource "aws_secretsmanager_secret" "ecs" {
   name        = var.name
   description = var.description
 }
@@ -7,7 +7,7 @@ resource "random_id" "policy_suffix" {
   byte_length = 8
 }
 
-resource "aws_iam_policy" "this" {
+resource "aws_iam_policy" "read_secrets" {
   name        = "SecretsManagerPolicyForECSTaskExecutionRole-${random_id.policy_suffix.hex}"
   description = "Access rights to SecretsManager Secret created by terraform-aws-ecs-secrets-manager module"
 
@@ -20,29 +20,15 @@ resource "aws_iam_policy" "this" {
           "secretsmanager:GetSecretValue"
         ]
         Resource = [
-          aws_secretsmanager_secret.this.arn
+          aws_secretsmanager_secret.ecs.arn
         ]
       }
     ]
   })
 }
 
-resource "aws_iam_role_policy_attachment" "this" {
+resource "aws_iam_role_policy_attachment" "ecs_secrets" {
   for_each   = toset(var.ecs_task_execution_roles)
   role       = each.value
-  policy_arn = aws_iam_policy.this.arn
-}
-
-locals {
-  ecs_secrets = var.enable_secret_assigned_to_single_key ? [
-    {
-      name      = coalesce(one(var.key_names), upper(replace(replace(var.name,"/[^a-zA-Z\\d\\-_:]/","*"),"-","_")))
-      valueFrom = aws_secretsmanager_secret.this.arn
-    }
-  ] : [
-    for key_name in var.key_names :{
-      name      = key_name
-      valueFrom = "${aws_secretsmanager_secret.this.arn}:${key_name}::"
-    }
-  ]
+  policy_arn = aws_iam_policy.read_secrets.arn
 }
